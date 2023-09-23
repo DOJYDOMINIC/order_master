@@ -6,11 +6,12 @@ import '../widget/main_fields.dart';
 
 class Shop {
   final String name;
-  final String stock;
-  final String price;
-  final String total;
+  final int stock;
+  final int price;
+  final int total;
+   int count;
 
-  Shop(this.name, this.stock, this.price, this.total);
+  Shop(this.name, this.stock, this.price, this.total, this.count);
 }
 
 class ItemsPage extends StatefulWidget {
@@ -22,18 +23,22 @@ class ItemsPage extends StatefulWidget {
 
 class _ItemsPageState extends State<ItemsPage> {
   List<Shop> itemlist = [
-    Shop('Soap', '120', '50', '10'),
-    Shop('lamp', '120', '20', '15'),
-    Shop('sugar', '120', '20', '15'),
+    Shop('Soap', 120, 50, 0,0),
+    Shop('lamp', 120, 50, 0,0),
+    Shop('sugar', 120, 20, 0,0),
     // Add more shop objects here
   ];
 
   List<Shop> selecteditemlist = [];
 
+  List<TextEditingController> controllers = [];
   TextEditingController _searchController = TextEditingController();
+  TextEditingController _count = TextEditingController();
+  int countone = 0;
   List<Shop> filtereditemlist = [];
 
-  var count = 1;
+
+  var count;
 
   void Add(){
     setState(() {
@@ -46,12 +51,14 @@ class _ItemsPageState extends State<ItemsPage> {
     });
   }
 
+
   void updateFilteredShops(String query) {
     setState(() {
       filtereditemlist = itemlist
           .where((shop) =>
-      shop.name.toLowerCase().contains(query.toLowerCase()) ||
-          shop.stock.toLowerCase().contains(query.toLowerCase()))
+      shop.name.toLowerCase().contains(query.toLowerCase())
+          // shop.stock.toLowerCase().contains(query.toLowerCase())
+      )
           .toList();
     });
   }
@@ -138,7 +145,7 @@ class _ItemsPageState extends State<ItemsPage> {
                       children: [
                         ListTile(
                           title: Text(item.name),
-                          subtitle: Text(item.stock),
+                          subtitle: Text('${item.stock}'),
                           trailing: GestureDetector(
                             child: Container(
                               child: Padding(
@@ -224,19 +231,18 @@ class _ItemsPageState extends State<ItemsPage> {
                             children: [
                               Column(
                                 children: [
-                                  Text(overflow:TextOverflow.fade ,item.name, style: GoogleFonts.poppins(fontSize: 18,fontWeight: FontWeight.bold),),
+                                  Text(item.name, style: GoogleFonts.poppins(fontSize: 18,fontWeight: FontWeight.bold),),
                                   SizedBox(height: 10,),
                                   Row(
                                     children: [
-                                      Text(item.stock, style: GoogleFonts.poppins()),
+                                      Text('${item.stock - item.count}', style: GoogleFonts.poppins()),
                                       Padding(
                                         padding: const EdgeInsets.fromLTRB(25,0,25,0),
-                                        child: Text(item.price, style: GoogleFonts.poppins()),
+                                        child: Text('${item.price}', style: GoogleFonts.poppins()),
                                       ),
-                                      Text(item.total, style: GoogleFonts.poppins()),
+                                      Text('${item.price * item.count}', style: GoogleFonts.poppins()),
                                     ],
                                   ),
-
                                 ],
                                 crossAxisAlignment: CrossAxisAlignment.start,
                               ),
@@ -244,20 +250,36 @@ class _ItemsPageState extends State<ItemsPage> {
                                 children: [
                                   GestureDetector(
                                     child: CircleAvatar(
-                                      child: Text('-',style: b_w_p),
+                                      child: Text('-', style: TextStyle(color: Colors.white)),
+                                      backgroundColor: app_color,
                                     ),
-                                    onTap: () => Sub(),
+                                    onTap: () {
+                                      setState(() {
+                                        if (item.count > 0) {
+                                          item.count--;
+                                        }
+                                      });
+                                    },
                                   ),
-                              Padding(
-                                padding: const EdgeInsets.fromLTRB(20,0,20,0),
-                                child: Text('${count}',style:button_home,),
-                              ),
-                              GestureDetector(
-                                child: CircleAvatar(
-                                  child: Text('+',style: b_w_p,),
-                                ),
-                                onTap: () => Add(),
-                              )
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      item.count.toString(),
+                                      style: TextStyle(fontSize: 18),
+                                    ),
+                                  ),
+                                  GestureDetector(
+                                    child: CircleAvatar(
+                                      child: Text('+', style: TextStyle(color: Colors.white)),
+                                      backgroundColor: app_color,
+                                    ),
+                                    onTap: () {
+                                      setState(() {
+                                        print(selecteditemlist);
+                                        item.count++;
+                                      });
+                                    },
+                                  ),
                                 ],
                               ),
                             ],
