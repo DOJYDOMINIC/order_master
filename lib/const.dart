@@ -2,8 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-final b_w_p = GoogleFonts.poppins(fontWeight:FontWeight.w500
-    ,fontSize: 25,color:Colors.white);
+final b_w_p = GoogleFonts.poppins(fontWeight:FontWeight.w500,fontSize: 25,color:Colors.white);
 final button_home = GoogleFonts.poppins(fontWeight:FontWeight.w600,fontSize: 20,color: Colors.black);
 final smallbutton = GoogleFonts.poppins(fontSize: 14,color: Colors.white);
 final Color app_color = Color.fromARGB(255, 31, 65, 188);
